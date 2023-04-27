@@ -63,9 +63,11 @@ namespace alike
                 std::vector<cv::DMatch> good_matches;
                 for (auto i = 0; i < knn_matches.size(); i++)
                 {
+                    std::cout << "distance:" << knn_matches[i][0].distance << std::endl;
                     if (knn_matches[i][0].distance < mMth * knn_matches[i][1].distance)
                     {
                         good_matches.push_back(knn_matches[i][0]);
+//                        std::cout << "distance:" << knn_matches[i][0].distance << std::endl;
                     }
                 }
 

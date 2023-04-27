@@ -119,7 +119,8 @@ int main(const int argc, char *argv[])
     }
     std::string file_path = args::get(file_path_parser);
     std::string model_path = args::get(model_path_parser);
-    bool use_cuda = args::get(use_cuda_parser);
+//    bool use_cuda = args::get(use_cuda_parser);
+    bool use_cuda = true;
     int top_k = args::get(top_k_parser);
     float scores_th = args::get(scores_th_parser);
     int n_limit = args::get(n_limit_parser);
@@ -134,6 +135,7 @@ int main(const int argc, char *argv[])
 
     // ===============> create model
     auto loader = ImageLoader(file_path);
+    std::cout << n_limit << std:: endl;
     auto alike = ALIKE(model_path, use_cuda, 2, top_k, scores_th, n_limit, !no_subpixel);
     auto tracker = SimpleTracker();
 
@@ -155,8 +157,15 @@ int main(const int argc, char *argv[])
             keypoints;
         cv::Mat descriptors;
         cv::Mat img_rgb;
-        cv::cvtColor(image, img_rgb, cv::COLOR_BGR2RGB);
+//        cv::cvtColor(image, img_rgb, cv::COLOR_BGR2RGB);
         auto img_tensor = mat2Tensor(image).permute({2, 0, 1}).unsqueeze(0).to(device).to(torch::kFloat) / 255;
+
+//        torch::Device device = img_tensor.device();
+//        if (device.is_cuda()) {
+//            std::cout << "img_tensor is on GPU device" << std::endl;
+//        } else {
+//            std::cout << "img_tensor is on CPU device" << std::endl;
+//        }
 
         // core
         using namespace std::chrono;
